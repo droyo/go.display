@@ -112,7 +112,7 @@ type Buffer struct {
 	ds    unsafe.Pointer
 	Event <-chan Event
 	event chan Event
-	sync.Mutex
+	lck sync.Mutex
 }
 
 // Helper functions for pulling values from our C shim
@@ -159,8 +159,8 @@ func (w *Buffer) Title() string {
 	if w == nil {
 		return ""
 	}
-	w.Lock()
-	defer w.Unlock()
+	w.lck.Lock()
+	defer w.lck.Unlock()
 	if s, err := valP(C.dsWinGetTitle(w.ds)); err != nil {
 		return ""
 	} else {
@@ -174,8 +174,8 @@ func (w *Buffer) SetTitle(title string) {
 	if w == nil {
 		return
 	}
-	w.Lock()
-	defer w.Unlock()
+	w.lck.Lock()
+	defer w.lck.Unlock()
 	s := C.CString(title)
 	if err := val(C.dsWinSetTitle(w.ds, s)); err != nil {
 		log.Print(err)
