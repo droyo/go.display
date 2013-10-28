@@ -1,5 +1,6 @@
 #include "display.h"
 #include <GLUT/glut.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -425,6 +426,7 @@ RP dsWinGetTitle(void *obj) {
 RC dsWinSetTitle(void *obj, char *s) {
 	RC v = {0, NULL};
 	glutSetWindowTitle(s);
+	return v;
 }
 
 R2 dsWinSize(void *obj) {
