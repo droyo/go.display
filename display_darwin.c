@@ -268,6 +268,9 @@ RC dsWinClose(void *win) {
 }
 
 void marshalRefreshEvent(void) {
+	if (!glutLayerGet(GLUT_NORMAL_DAMAGED)) {
+		return;
+	}
 	G.eventOccured = 1;
 	G.event.Type = ERefresh;
 	goProcessEvent(G.data, G.event.Type, &G.event);
@@ -372,6 +375,10 @@ void marshalSpecialUpEvent(int k, int x, int y) {
 	G.event.KeyPress.Code = glut2dsKey(k);
 	G.event.KeyPress.Mod = glut2dsMod(glutGetModifiers());
 	goProcessEvent(G.data, G.event.Type, &G.event.KeyPress);
+}
+
+void unblock_event_loop(void) {
+	glutPostRedisplay();
 }
 
 void marshalCloseEvent(void) {
@@ -527,6 +534,7 @@ RP dsWinOpen(void *data, int argc, char **argv) {
 	glutSpecialFunc(marshalSpecialEvent);
 	glutSpecialUpFunc(marshalSpecialUpEvent);
 	glutWMCloseFunc(marshalCloseEvent);
+	glutIdleFunc(unblock_event_loop);
 	
 	v.rp = &G.window;
 	v.err = NULL;
