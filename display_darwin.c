@@ -8,6 +8,7 @@ KeyCode glut2dsChr(unsigned char c);
 KeyCode glut2dsKey(int k);
 int glut2dsMod(int m);
 int glut2dsBtn(int b);
+void unblock_event_loop(void);
 
 #define nelem(x) ((sizeof(x))/(sizeof(*x)))
 
@@ -465,6 +466,7 @@ void parse_config(Config *cfg, int argc, char **argv) {
 	cfg->Mode = GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH;
 	cfg->Fullscreen = 0;
 	cfg->WarpMouse = 0;
+	cfg->Title = strdup("Window");
 	
 	for(i = 0; i < argc; i += 2) {
 		key = argv[i];
@@ -483,6 +485,7 @@ void parse_config(Config *cfg, int argc, char **argv) {
 				cfg->WarpMouse = 1;
 			}
 		} else if(!strcmp(key, "Title")) {
+			free(cfg->Title);
 			cfg->Title = val;
 		} else if(!strcmp(key, "OpenGL Version")) {
 			if (!strcmp(val, "3.2")) {
