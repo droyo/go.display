@@ -1,0 +1,9 @@
+import "aqwari.net/exp/display"
+
+This is a small library that focuses on getting an OpenGL-enabled
+window and receiving input. The API is still unstable and evolving.
+The library has a few goals:
+
+  · go-gettable: only use libraries installed by default
+  · focused: only events and window creation. use whatever GL lib you like
+  · idiomatic: Events received on a channel, no callbacks
