@@ -4,8 +4,8 @@ package display
 #include "display.h"
 #include <stdlib.h>
 
-#cgo darwin  LDFLAGS: -Wno-deprecated-declarations -framework GLUT -framework OpenGL
-#cgo darwn CFLAGS: -Wno-deprecated-declarations
+#cgo darwin CFLAGS: -Wno-deprecated-declarations
+#cgo darwin  LDFLAGS: -framework GLUT -framework OpenGL
 #cgo linux   LDFLAGS: -lGL -lSDL2
 #cgo windows LDFLAGS: -lopengl32 -lSDL2
 */
