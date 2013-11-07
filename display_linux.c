@@ -103,10 +103,10 @@ KeyCode KeyLUT[] = {
 	[SDL_SCANCODE_PAUSE]              = KeyPause,
 	[SDL_SCANCODE_INSERT]             = KeyInsert,
 	[SDL_SCANCODE_HOME]               = KeyHome,
-	[SDL_SCANCODE_PAGEUP]             = KeyPageup,
+	[SDL_SCANCODE_PAGEUP]             = KeyPageUp,
 	[SDL_SCANCODE_DELETE]             = KeyDelete,
 	[SDL_SCANCODE_END]                = KeyEnd,
-	[SDL_SCANCODE_PAGEDOWN]           = KeyPagedown,
+	[SDL_SCANCODE_PAGEDOWN]           = KeyPageDown,
 	[SDL_SCANCODE_RIGHT]              = KeyRight,
 	[SDL_SCANCODE_LEFT]               = KeyLeft,
 	[SDL_SCANCODE_DOWN]               = KeyDown,
@@ -549,7 +549,7 @@ RC dsWinWaitEvent(void *obj) {
 RC dsWinGrabMouse(void *obj) {
 	RC v;
 	Window *w = obj;
-	v.rc = SDL_SetRelativeMouseMode(w->win, SDL_TRUE);
+	v.rc = SDL_SetRelativeMouseMode(SDL_TRUE);
 	if (v.rc) {
 		v.err = strdup(SDL_GetError());
 		SDL_ClearError();
@@ -562,7 +562,7 @@ RC dsWinGrabMouse(void *obj) {
 RC dsWinReleaseMouse(void *obj) {
 	RC v;
 	Window *w = obj;
-	v.rc = SDL_SetRelativeMouseMode(w->win, SDL_FALSE);
+	v.rc = SDL_SetRelativeMouseMode(SDL_FALSE);
 	if (v.rc) {
 		v.err = strdup(SDL_GetError());
 		SDL_ClearError();
@@ -575,7 +575,7 @@ RC dsWinReleaseMouse(void *obj) {
 RC dsWinMouseWarp(void *obj, int x, int y) {
 	RC v = {0, NULL};
 	Window *w = obj;
-	v.rc = SDL_WarpMouseInWindow(w->win, x, y);
+	SDL_WarpMouseInWindow(w->W, x, y);
 	return v;
 }
 

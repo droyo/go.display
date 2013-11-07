@@ -105,21 +105,6 @@ type Damage struct {
 // device is not important.
 type Device uint32
 
-// The GenDevice function may be used to generate a unique device
-// identifier. If the pool of device identifiers has been exhausted,
-// the device identifier will be zero.
-func GenDevice() Device {
-	var next Device
-	d := <-devicePool
-	if d == 0 {
-		next = 0
-	} else {
-		next = d + 1
-	}
-	devicePool <- next
-	return d
-}
-
 // Our backing libraries do not support multiple mice/keyboards,
 // so we will just fake it in our API. Hopefully we'll find support
 // in the future.

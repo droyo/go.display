@@ -28,7 +28,17 @@ func init() {
 
 // A Config is used to choose the settings of a
 // window display. Different systems may support
-// different configurations.
+// different configurations. Most configuration
+// settings should be considered hints rather than
+// requirements. The implementation will make the
+// best effort to provide a window matching the
+// specifications. Keys common to all implementations
+// are:
+//
+// 	Title:          A window's initial title
+//	Geometry:       A window's size and position (WxH@x,y)
+//  OpenGL Version: An OpenGL version string ("3.2")
+//
 type Config map[string]string
 
 //export goProcessEvent
@@ -106,9 +116,9 @@ func (w Buffer) enqueue(e Event) {
 	}
 }
 
-// A Buffer is an OpenGL canvas that can be displayed
-// within an OS window. Buffers can receive user input,
-// which can be accessed with the Subscribe() method.
+// A Buffer is an OpenGL canvas displayed within an OS
+// window. Events can be received on the Buffer's Event
+// channel.
 type Buffer struct {
 	ds    unsafe.Pointer
 	Event <-chan Event
@@ -209,10 +219,7 @@ func (w *Buffer) Resize(width, height int) error {
 }
 
 // Flip swaps the background buffer with the foregroud buffer.
-// All drawing is done to the background buffer. The window's context
-// must be set in the calling goroutine with TakeContext() before
-// SwapBuffers, or any GL drawing functions, are called. By default,
-// SwapBuffers will block until the screen is refreshed.
+// All drawing is done to the background buffer.
 func (w *Buffer) Flip() {
 	C.dsWinSwap(w.ds)
 }
@@ -237,7 +244,7 @@ func freeArgv(argv []*C.char) {
 	}
 }
 
-// Open creates a new window.
+// Open creates a new Buffer on the screen.
 func Open(c Config) (*Buffer, error) {
 	var argv []*C.char
 	var err error
@@ -265,10 +272,15 @@ func Open(c Config) (*Buffer, error) {
 	return buf, nil
 }
 
+// CheckEvents checks the event system for new input without blocking.
+// A Buffer's Event channel will not be populated with new Events unless
+// CheckEvent or WaitEvent is called.
 func (w *Buffer) CheckEvent() error {
 	return val(C.dsWinCheckEvent(w.ds))
 }
 
+// WaitEvent blocks until a new Event occurs. New Events will be available
+// on the Buffer's Event channel.
 func (w *Buffer) WaitEvent() error {
 	return val(C.dsWinWaitEvent(w.ds))
 }
