@@ -5,18 +5,12 @@ go_library(
     srcs = [
         "display.go",
         "display.h",
+        "display_darwin.c",
+        "display_linux.c",
         "doc.go",
         "event.go",
         "keys.go",
-    ] + select({
-        "@io_bazel_rules_go//go/platform:darwin": [
-            "display_darwin.c",
-        ],
-        "@io_bazel_rules_go//go/platform:linux": [
-            "display_linux.c",
-        ],
-        "//conditions:default": [],
-    }),
+    ],
     cgo = True,
     clinkopts = select({
         "@io_bazel_rules_go//go/platform:darwin": [
